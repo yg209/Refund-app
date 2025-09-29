@@ -1,0 +1,1 @@
+const express=require('express');const app=express();app.get('/',(r,s)=>s.send('ok'));app.listen(3000,()=>console.log('listening'));
