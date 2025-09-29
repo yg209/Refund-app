@@ -1,0 +1,18 @@
+const sequelize = require('../config/database');
+const User = require('./user')(sequelize);
+const Receipt = require('./receipt')(sequelize);
+const Product = require('./product')(sequelize);
+const Watch = require('./watch')(sequelize);
+const Claim = require('./claim')(sequelize);
+const Payout = require('./payout')(sequelize);
+User.hasMany(Receipt, { foreignKey: 'user_id' });
+Receipt.belongsTo(User, { foreignKey: 'user_id' });
+Receipt.hasMany(Watch, { foreignKey: 'receipt_id' });
+Watch.belongsTo(Receipt, { foreignKey: 'receipt_id' });
+Product.hasMany(Watch, { foreignKey: 'product_id' });
+Watch.belongsTo(Product, { foreignKey: 'product_id' });
+Receipt.hasMany(Claim, { foreignKey: 'receipt_id' });
+Claim.belongsTo(Receipt, { foreignKey: 'receipt_id' });
+User.hasMany(Payout, { foreignKey: 'user_id' });
+Payout.belongsTo(User, { foreignKey: 'user_id' });
+module.exports = { sequelize, User, Receipt, Product, Watch, Claim, Payout, initModels: () => sequelize.authenticate().then(()=> console.log('DB connected')) };
