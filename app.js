@@ -1,0 +1,15 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const { initModels } = require('./models');
+const app = express();
+app.use(cors());
+app.use(express.json());
+initModels();
+app.use('/users', require('./routes/users'));
+app.use('/receipts', require('./routes/receipts'));
+app.use('/products', require('./routes/products'));
+app.use('/claims', require('./routes/claims'));
+app.use('/payouts', require('./routes/payouts'));
+app.get('/health', (req, res) => res.json({ ok:true }));
+module.exports = app;
