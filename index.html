@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SafeStar Admin — Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div class="title">SafeStar Admin</div>
+    </div>
+
+    <nav class="nav">
+      <a class="nav-item active" href="#dashboard">Dashboard</a>
+      <a class="nav-item" href="#se-star">SE-STAR (Scanner)</a>
+      <a class="nav-item" href="#safe-star">SafeStar (Vaults)</a>
+      <a class="nav-item" href="#subscription-star">SubscriptionStar</a>
+      <a class="nav-item" href="#refunds">Refunds</a>
+      <a class="nav-item" href="#users">Users</a>
+      <a class="nav-item" href="#settings">Settings</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button id="btn-logout" class="btn-ghost">Sign out</button>
+      <small class="muted">v0.1 • Internal</small>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="search">
+        <input id="globalSearch" placeholder="Search tx / wallet / user / serial..." />
+      </div>
+      <div class="top-actions">
+        <button class="btn">New Refund</button>
+        <div class="avatar">AD</div>
+      </div>
+    </header>
+
+    <section class="container">
+      <h1>Overview</h1>
+
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>System Health</h3>
+          <div class="kpi">
+            <div>
+              <div class="kpi-value" id="kpi-workers">3</div>
+              <div class="kpi-label">Workers</div>
+            </div>
+            <div>
+              <div class="kpi-value danger" id="kpi-queue">12</div>
+              <div class="kpi-label">Queue length</div>
+            </div>
+            <div>
+              <div class="kpi-value" id="kpi-pending">7</div>
+              <div class="kpi-label">Pending refunds</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Latest Blockchain Activity</h3>
+          <ul class="tiny-list" id="latest-tx">
+            <li>0xA9...f3d — Mint RGT — <span class="muted">1m ago</span></li>
+            <li>0xB1...c8a — Escrow Create — <span class="muted">3m ago</span></li>
+            <li>0xC4...901 — Refund Payout — <span class="muted">10m ago</span></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Quick Actions</h3>
+          <div class="actions">
+            <button class="btn-primary">Create Manual Refund</button>
+            <button class="btn-outline">Trigger Trial Sweep</button>
+            <button class="btn-ghost">Run Price Match</button>
+          </div>
+        </div>
+      </div>
+
+      <h2>Active Components</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>SE-STAR Address Scanner</h3>
+          <div class="scanner">
+            <input id="scanAddr" placeholder="0x1234...abcd" />
+            <button class="btn" id="btnScan">Scan</button>
+          </div>
+          <div id="scanResult" class="scan-result muted">No scan yet</div>
+        </div>
+
+        <div class="card">
+          <h3>SubscriptionStar: Trials expiring soon</h3>
+          <table class="table">
+            <thead><tr><th>User</th><th>Email</th><th>Plan</th><th>Expires</th><th>Action</th></tr></thead>
+            <tbody id="trials">
+              <tr><td>user1</td><td>u1@ex.com</td><td>Pro</td><td>2025-10-03</td><td><button class="btn">Cancel</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h2>Refunds queue</h2>
+      <div class="card">
+        <table class="table" id="refunds-table">
+          <thead><tr><th>ID</th><th>User</th><th>USD</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>#124</td><td>alice</td><td>$24.99</td><td><span class="badge pending">Pending</span></td><td><button class="btn">Open</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+  </main>
+
+<script>
+  // placeholder interactions (only UI demo)
+  document.getElementById('btnScan').addEventListener('click', ()=>{
+    const a = document.getElementById('scanAddr').value || '0x4a1...5f60';
+    document.getElementById('scanResult').textContent = 'Scanned: ' + a + ' • Risk: LOW (green)';
+  });
+</script>
+</body>
+</html>
