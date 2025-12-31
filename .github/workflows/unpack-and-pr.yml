@@ -1,0 +1,52 @@
+name: Unpack ZIPs and Open PR
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '**/*.zip'
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Install unzip
+        run: sudo apt-get update && sudo apt-get install -y unzip
+
+      - name: Find and extract ZIPs
+        id: extract
+        run: |
+          set -e
+          mkdir -p extracted
+          found=false
+          for z in $(git ls-files '*.zip' || true); do
+            echo "Extracting $z"
+            d="extracted/$(basename "${z%.*}")"
+            mkdir -p "$d"
+            unzip -o "$z" -d "$d"
+            found=true
+          done
+          if [ "$found" = "false" ]; then
+            echo "no_zip=true" >> $GITHUB_OUTPUT
+          else
+            echo "no_zip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request with extracted files
+        if: steps.extract.outputs.no_zip == 'false'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: add extracted files from zip(s)"
+          branch: "ci/unpacked-${{ github.run_id }}"
+          title: "chore: Add extracted files from ZIP archives"
+          body: "This PR contains files extracted from ZIP archives found in the repository. Original ZIP files were left in place."
+          labels: |
+            ci
+            automated
+          paths: |
+            extracted/**
